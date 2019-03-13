@@ -1,0 +1,61 @@
+import java.util.List;
+import java.util.Map;
+
+import ca.roumani.i2c.Country;
+import ca.roumani.i2c.CountryDB;
+
+public class Game
+{
+    private CountryDB db;
+
+    public Game()
+    {
+        this.db = new CountryDB();
+    }
+
+    public String qa()
+    {
+        List<String> capitals = db.getCapitals();
+        int n = capitals.size();
+        int index = (int) (n * Math.random());
+        String c = capitals.get(index);
+
+        Map<String, Country> data = db.getData();
+        Country ref = data.get(c);
+        String result = "";
+
+        if (Math.random() < 0.5)
+        {
+            result = "What is the capital of " + ref.getName() + " ? \n" + ref.getCapital();
+        }
+        else
+        {
+            result = ref.getCapital() + " is the capital of? \n" + ref.getName();
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+//        CountryDB db = new CountryDB();
+//        List<String> capitals = db.getCapitals();
+//        System.out.println(capitals.size());
+//        String c = capitals.get(99);
+//        System.out.println(c);
+
+//        Map<String, Country> data = db.getData();
+//        System.out.println(data.size());
+//        Country ref = data.get(c);
+        Game game = new Game();
+        System.out.println(game.qa());
+
+        System.out.println("This is a break");
+
+        String[] parts = game.qa().split("\\n");
+        String question = parts[0];
+        String answer = parts[1];
+
+        System.out.println(question);
+        System.out.println(answer);
+
+    }
+}
