@@ -1,0 +1,85 @@
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import java.util.List;
+import java.util.Map;
+
+import ca.roumani.i2c.Country;
+import ca.roumani.i2c.CountryDB;
+
+public class CapsActivity extends AppCompatActivity {
+
+    private Game game;
+    private String question;
+    private String answer;
+    private int score;
+    private int qNum;
+    public String myLog = "";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_caps);
+
+        this.game = new Game();
+        this.question = question;
+        this.answer = answer;
+        this.score = score;
+        this.qNum = qNum;
+        ask();
+    }
+
+    private void ask()
+    {
+        String myQuestion = game.qa();
+        String[] parts = myQuestion.split("\\n");
+        this.question = parts[0];
+        this.answer = parts[1];
+
+        ((TextView) findViewById(R.id.question)).setText(this.question);
+    }
+
+    public void onDone(View v)
+    {
+        this.qNum ++;
+
+        if (this.qNum == 10)
+        {
+            finish();
+        }
+
+        TextView userScore = (TextView) findViewById(R.id.score);
+        String[] userScoreCount = userScore.getText().toString().split("\\s");
+        this.score = Integer.parseInt(userScoreCount[2]);
+
+        EditText userAnswer = (EditText) findViewById(R.id.answer);
+        String matchingUserAnswer = userAnswer.getText().toString();
+
+
+        if ((matchingUserAnswer).equalsIgnoreCase(this.answer))
+        {
+            this.score ++;
+            ((TextView) findViewById(R.id.score)).setText("SCORE = " + this.score);
+        }
+
+        myLog += this.question + "\n" + this.answer + "\n" + matchingUserAnswer;
+        myLog += "\n\n";
+
+        ((TextView) findViewById(R.id.log)).setText(myLog);
+
+        if (this.qNum <= 9)
+        {
+            ((TextView) findViewById(R.id.qNum)).setText("Q# " + String.valueOf(this.qNum + 1));
+        }
+        else
+        {
+            ((TextView) findViewById(R.id.qNum)).setText("GAME OVER");
+        }
+
+        ask();
+    }
+
+}
